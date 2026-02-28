@@ -3,12 +3,9 @@ import type { User, AuthTokens, LoginCredentials, RegisterData } from '@/types'
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<AuthTokens> {
-    const formData = new URLSearchParams()
-    formData.append('username', credentials.email)
-    formData.append('password', credentials.password)
-
-    const response = await api.post<AuthTokens>('/auth/login', formData, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    const response = await api.post<AuthTokens>('/auth/login', {
+      email: credentials.email,
+      password: credentials.password,
     })
 
     // Store tokens

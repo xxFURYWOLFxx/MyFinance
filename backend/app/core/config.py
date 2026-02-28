@@ -7,7 +7,6 @@ class Settings(BaseSettings):
     # App
     APP_NAME: str = "MyFinance"
     DEBUG: bool = False
-    API_V1_PREFIX: str = "/api"
 
     # Database (using SQLite for development)
     DATABASE_URL: str = "sqlite:///./finance.db"
@@ -19,7 +18,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
 
     # CORS
-    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173", "http://192.168.1.199:5173"]
+    CORS_ORIGINS: list[str] = ["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173", "https://paraymn.com", "https://www.paraymn.com"]
 
     # Email (SMTP)
     SMTP_HOST: Optional[str] = None
@@ -30,11 +29,13 @@ class Settings(BaseSettings):
     SMTP_USE_TLS: bool = True
 
     # Frontend URL (used in password reset emails)
-    FRONTEND_URL: str = "http://localhost:5173"
+    FRONTEND_URL: str = "https://paraymn.com"
 
     # Admin
     FIRST_ADMIN_EMAIL: Optional[str] = None
     FIRST_ADMIN_PASSWORD: Optional[str] = None
+    ADMIN_SETUP_TOKEN: Optional[str] = None
+    ALLOWED_ADMIN_IPS: list[str] = []
 
     class Config:
         env_file = ".env"

@@ -188,12 +188,6 @@ export function LoginForm() {
           </div>
         </div>
 
-        {/* Demo account hint */}
-        <div className="mt-6 text-center">
-          <p className="text-xs text-muted-foreground/60">
-            Demo: admin@test.com / password123
-          </p>
-        </div>
       </div>
     </div>
   )

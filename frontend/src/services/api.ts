@@ -78,7 +78,8 @@ api.interceptors.response.use(
   async (error: AxiosError<{ detail?: string }>) => {
     const originalRequest = error.config
     const status = error.response?.status || 500
-    const detail = error.response?.data?.detail
+    const rawDetail = error.response?.data?.detail
+    const detail = typeof rawDetail === 'string' ? rawDetail : undefined
 
     // If 401 and not already retrying, try to refresh token
     if (

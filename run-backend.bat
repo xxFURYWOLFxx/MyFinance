@@ -26,12 +26,12 @@ if exist "venv\Scripts\activate.bat" (
     echo [INFO] No virtual environment found, using global Python
 )
 
-echo [OK] Starting server on http://localhost:8000
-echo [OK] API Docs at http://localhost:8000/docs
+echo [OK] Starting server on http://localhost:3500
+echo [OK] API Docs at http://localhost:3500/docs
 echo.
 echo Press Ctrl+C to stop the server
 echo.
 
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --host 0.0.0.0 --port 3500
 
 pause

@@ -27,7 +27,7 @@ source venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env        # edit as needed (SMTP settings for email verification)
 python init_db.py            # creates the SQLite database
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 3500
 ```
 
 ### Frontend
@@ -38,7 +38,7 @@ npm install
 npm run dev
 ```
 
-Open `http://localhost:5173` in your browser. The frontend proxies `/api` requests to the backend at `localhost:8000` automatically (configured in `vite.config.ts`).
+Open `http://localhost:5173` in your browser. The frontend proxies `/api` requests to the backend at `localhost:3500` automatically (configured in `vite.config.ts`).
 
 ### Windows Shortcut
 
@@ -111,16 +111,16 @@ Finance/
 | `ALGORITHM` | `HS256` | JWT algorithm |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | `30` | How long access tokens last |
 | `REFRESH_TOKEN_EXPIRE_DAYS` | `7` | How long refresh tokens last |
-| `CORS_ORIGINS` | `["http://localhost:3000","http://localhost:5173"]` | Allowed frontend origins (JSON array) |
+| `CORS_ORIGINS` | `["http://localhost:3000","http://localhost:5173","https://paraymn.com"]` | Allowed frontend origins (JSON array) |
 | `APP_NAME` | `MyFinance` | Application name |
 | `DEBUG` | `false` | Debug mode |
 | `SMTP_HOST` | *(none)* | SMTP server hostname (e.g. `smtp.resend.com`, `smtp.gmail.com`) |
 | `SMTP_PORT` | `587` | SMTP port |
 | `SMTP_USER` | *(none)* | SMTP username |
 | `SMTP_PASSWORD` | *(none)* | SMTP password or API key |
-| `SMTP_FROM_EMAIL` | *(none)* | Sender email address (e.g. `noreply@yourdomain.com`) |
+| `SMTP_FROM_EMAIL` | *(none)* | Sender email address (e.g. `noreply@paraymn.com`) |
 | `SMTP_USE_TLS` | `true` | Use STARTTLS |
-| `FRONTEND_URL` | `http://localhost:5173` | Used in email links (password reset, verification) |
+| `FRONTEND_URL` | `https://paraymn.com` | Used in email links (password reset, verification) |
 
 **Email setup:** SMTP is needed for email verification and password resets. If SMTP isn't configured, emails are printed to the server console instead (useful during development). Works with any SMTP provider -- Resend, Gmail App Passwords, SendGrid, Mailgun, etc.
 
@@ -160,11 +160,11 @@ Finance/
 
 ## API Reference
 
-Base URL: `http://localhost:8000/api`
+Base URL: `http://localhost:3500/api`
 
 Interactive docs (auto-generated from the code):
-- **Swagger UI:** `http://localhost:8000/api/docs`
-- **ReDoc:** `http://localhost:8000/api/redoc`
+- **Swagger UI:** `http://localhost:3500/api/docs`
+- **ReDoc:** `http://localhost:3500/api/redoc`
 
 All endpoints except auth routes require a Bearer token in the `Authorization` header.
 
@@ -690,7 +690,7 @@ Tables are created by `python init_db.py`. Uses SQLAlchemy, so switching databas
 **Backend** (hot reload on file changes):
 ```bash
 cd backend
-python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 3500
 ```
 
 **Frontend** (HMR via Vite):
@@ -699,7 +699,7 @@ cd frontend
 npm run dev
 ```
 
-Vite runs on port 5173 and proxies `/api` to `localhost:8000`.
+Vite runs on port 5173 and proxies `/api` to `localhost:3500`.
 
 **Production build:**
 ```bash
@@ -716,11 +716,11 @@ Serve `dist/` with any static file server. Point your API URL at the backend.
 **Port already in use:**
 ```bash
 # Windows
-netstat -ano | findstr :8000
+netstat -ano | findstr :3500
 taskkill /PID <pid> /F
 
 # Linux/Mac
-lsof -i :8000
+lsof -i :3500
 kill -9 <pid>
 ```
 

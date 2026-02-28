@@ -3,7 +3,7 @@ from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.db.session import get_db
-from app.core.security import decode_token, hash_ip
+from app.core.security import decode_token, hash_ip, get_client_ip
 from app.core.system_settings import is_ip_binding_enabled
 from app.models.user import User, UserRole
 
@@ -31,7 +31,7 @@ def get_current_user(
 
     # Validate IP binding if enabled and token has IP claim
     if payload.get("ip") and is_ip_binding_enabled(db):
-        client_ip = request.client.host if request.client else None
+        client_ip = get_client_ip(request)
         if client_ip and hash_ip(client_ip) != payload["ip"]:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -95,7 +95,7 @@ def get_optional_user(
 
     # Validate IP binding
     if payload.get("ip") and is_ip_binding_enabled(db):
-        client_ip = request.client.host if request.client else None
+        client_ip = get_client_ip(request)
         if client_ip and hash_ip(client_ip) != payload["ip"]:
             return None
 

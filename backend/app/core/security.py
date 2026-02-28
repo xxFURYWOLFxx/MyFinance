@@ -2,25 +2,42 @@ import hashlib
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Any
 from jose import jwt, JWTError
-from passlib.context import CryptContext
+import bcrypt
+from fastapi import Request
 from .config import settings
-
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify a password against a hash."""
-    return pwd_context.verify(plain_password, hashed_password)
+    password_bytes = plain_password.encode("utf-8")[:72]
+    hash_bytes = hashed_password.encode("utf-8")
+    return bcrypt.checkpw(password_bytes, hash_bytes)
 
 
 def get_password_hash(password: str) -> str:
     """Hash a password."""
-    return pwd_context.hash(password)
+    password_bytes = password.encode("utf-8")[:72]
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password_bytes, salt).decode("utf-8")
 
 
 def hash_ip(ip: str) -> str:
     """Create a SHA-256 hash of an IP address for storage in JWT."""
     return hashlib.sha256(ip.encode()).hexdigest()[:16]
+
+
+def get_client_ip(request: Request) -> Optional[str]:
+    """Get the real client IP, respecting proxy headers.
+
+    Checks X-Forwarded-For (set by the MatrixAuth proxy) first,
+    then falls back to the direct connection IP.
+    """
+    xff = request.headers.get("x-forwarded-for")
+    if xff:
+        # X-Forwarded-For can contain multiple IPs: client, proxy1, proxy2
+        # The first one is the real client IP
+        return xff.split(",")[0].strip()
+    return request.client.host if request.client else None
 
 
 def create_access_token(

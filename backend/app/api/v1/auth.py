@@ -1,7 +1,6 @@
 import secrets
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Depends, HTTPException, Request, status
-from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.core.security import (
@@ -10,6 +9,7 @@ from app.core.security import (
     create_access_token,
     create_refresh_token,
     decode_token,
+    get_client_ip,
 )
 from app.core.system_settings import (
     get_access_token_minutes,
@@ -22,6 +22,7 @@ from app.schemas.user import (
     UserUpdate,
     UserResponse,
     Token,
+    LoginRequest,
     PasswordChange,
     PasswordResetRequest,
     PasswordReset,
@@ -31,6 +32,7 @@ from app.schemas.user import (
 from app.schemas.common import MessageResponse
 from app.api.deps import get_current_user
 from app.services.email import send_password_reset_email, send_verification_email
+from app.core.config import settings
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -97,13 +99,13 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 def login(
     request: Request,
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    login_data: LoginRequest,
     db: Session = Depends(get_db),
 ):
     """Login and get access token."""
-    user = db.query(User).filter(User.email == form_data.username).first()
+    user = db.query(User).filter(User.email == login_data.email).first()
 
-    if not user or not verify_password(form_data.password, user.password_hash):
+    if not user or not verify_password(login_data.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
@@ -131,7 +133,7 @@ def login(
     access_minutes = get_access_token_minutes(db)
     refresh_days = get_refresh_token_days(db)
     ip_binding = is_ip_binding_enabled(db)
-    client_ip = request.client.host if request.client else None
+    client_ip = get_client_ip(request)
 
     return Token(
         access_token=create_access_token(
@@ -229,7 +231,7 @@ def refresh_token(request: Request, refresh_token: str, db: Session = Depends(ge
     access_minutes = get_access_token_minutes(db)
     refresh_days = get_refresh_token_days(db)
     ip_binding = is_ip_binding_enabled(db)
-    client_ip = request.client.host if request.client else None
+    client_ip = get_client_ip(request)
 
     return Token(
         access_token=create_access_token(
@@ -368,17 +370,24 @@ def reset_password(data: PasswordReset, db: Session = Depends(get_db)):
     return MessageResponse(message="Password has been reset successfully")
 
 
-def _is_localhost(request: Request) -> bool:
-    """Check if the request originates from localhost."""
-    client_host = request.client.host if request.client else None
-    localhost_addrs = {"127.0.0.1", "::1", "localhost"}
-    return client_host in localhost_addrs
+def _is_allowed_admin_access(request: Request) -> bool:
+    """Check if the request is allowed to create admin accounts.
+
+    Allows localhost (127.0.0.1, ::1) plus any IPs listed in
+    ALLOWED_ADMIN_IPS in the .env file.
+    Uses get_client_ip() to get the real client IP behind a reverse proxy.
+    """
+    allowed = {"127.0.0.1", "::1", "localhost"}
+    allowed.update(settings.ALLOWED_ADMIN_IPS)
+
+    client_ip = get_client_ip(request)
+    return client_ip in allowed if client_ip else False
 
 
 @router.post("/create-admin", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def create_admin(user_data: UserCreate, request: Request, db: Session = Depends(get_db)):
-    """Create a new admin account. Only accessible from localhost."""
-    if not _is_localhost(request):
+    """Create a new admin account. Only accessible from allowed IPs."""
+    if not _is_allowed_admin_access(request):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin creation is only available from localhost",
@@ -410,8 +419,8 @@ def create_admin(user_data: UserCreate, request: Request, db: Session = Depends(
 
 @router.get("/localhost-check")
 def check_localhost(request: Request):
-    """Check if the current request is from localhost."""
-    return {"is_localhost": _is_localhost(request), "client_host": request.client.host if request.client else None}
+    """Check if the current request is from an allowed IP."""
+    return {"is_localhost": _is_allowed_admin_access(request), "client_host": get_client_ip(request)}
 
 
 @router.delete("/me", response_model=MessageResponse)

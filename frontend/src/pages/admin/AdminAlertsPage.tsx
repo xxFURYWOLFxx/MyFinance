@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
   AlertTriangle,
-  Activity,
   Info,
   Loader2,
   RefreshCw,
-  Bell,
   CheckCircle2,
   XCircle,
 } from 'lucide-react'

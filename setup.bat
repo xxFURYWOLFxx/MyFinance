@@ -122,8 +122,7 @@ echo   - run-backend.bat  : Start backend only
 echo   - run-frontend.bat : Start frontend only
 echo   - stop.bat         : Stop all servers
 echo.
-echo   Default login:
-echo   - Email:    admin@example.com
-echo   - Password: admin123
+echo   Create your admin account at:
+echo   http://localhost:5173/create-admin
 echo.
 pause

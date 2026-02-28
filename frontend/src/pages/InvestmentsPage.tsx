@@ -197,7 +197,6 @@ function InteractiveCandlestickChart({
 
   // How many candles the view extends before/after the actual data
   const dataStartOffset = Math.max(0, -Math.floor(viewRange.start))
-  const dataEndOffset = Math.max(0, Math.ceil(viewRange.end) - data.length)
 
   const visibleData = useMemo(() => {
     const start = Math.max(0, Math.floor(viewRange.start))
@@ -1399,7 +1398,7 @@ export function InvestmentsPage() {
 
   // Page-level favorites for quick access bar (all types)
   const [quickAccessFavorites, setQuickAccessFavorites] = useState<PopularAssetDisplay[]>([])
-  const [loadingQuickAccess, setLoadingQuickAccess] = useState(false)
+  const [, setLoadingQuickAccess] = useState(false)
 
   // Form state
   const [formData, setFormData] = useState({
@@ -1752,12 +1751,15 @@ export function InvestmentsPage() {
       const previewHolding: InvestmentHolding = {
         id: -1, // Negative ID to indicate it's a preview
         user_id: 0,
+        account_id: 0,
         symbol: favorite.symbol,
         name: priceData.name || favorite.name,
         asset_type: favorite.asset_type,
         quantity: 0,
         average_cost: 0,
         current_price: priceData.price,
+        last_price_update: null,
+        currency: 'USD',
         current_value: 0,
         gain_loss: 0,
         gain_loss_percent: 0,
@@ -1771,12 +1773,15 @@ export function InvestmentsPage() {
       const previewHolding: InvestmentHolding = {
         id: -1,
         user_id: 0,
+        account_id: 0,
         symbol: favorite.symbol,
         name: favorite.name,
         asset_type: favorite.asset_type,
         quantity: 0,
         average_cost: 0,
         current_price: 0,
+        last_price_update: null,
+        currency: 'USD',
         current_value: 0,
         gain_loss: 0,
         gain_loss_percent: 0,

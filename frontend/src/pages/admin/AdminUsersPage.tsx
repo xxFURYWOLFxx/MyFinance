@@ -1,17 +1,15 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
   Search,
-  UserCog,
   Eye,
   Ban,
   CheckCircle2,
   Clock,
-  MoreVertical,
   Loader2,
   Shield,
   ShieldOff,
@@ -19,7 +17,6 @@ import {
   UserX,
   ChevronDown,
   ChevronUp,
-  DollarSign,
   X,
   Users,
 } from 'lucide-react'

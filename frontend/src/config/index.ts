@@ -12,29 +12,18 @@ const isProduction = import.meta.env.PROD
 /**
  * API Configuration
  *
- * API_BASE_URL: The base URL for all API requests
- * - In development, this typically proxies to the backend server
- * - In production, change this to your actual API domain
- *
- * Examples:
- * - Local development with Vite proxy: '/api'
- * - Local backend direct: 'http://localhost:8000/api/v1'
- * - Production domain: 'https://api.yourfinance.com/api/v1'
- * - Production IP: 'http://123.45.67.89:8000/api/v1'
+ * VITE_API_URL: Set in .env to point at the backend root.
+ * - Development:  http://localhost:3500
+ * - Production:   https://paraymn.com/api  (reverse proxy handles the path)
  */
 export const API_CONFIG = {
-  // Base URL for API requests
-  // Change this to your backend URL in production
-  BASE_URL: import.meta.env.VITE_API_URL || '/api',
-
-  // API version prefix (appended to BASE_URL if using direct backend URL)
-  VERSION: 'v1',
+  BASE_URL: import.meta.env.VITE_API_URL || 'http://localhost:3500',
 
   // Request timeout in milliseconds
   TIMEOUT: 30000,
 
-  // Whether to include credentials (cookies) in requests
-  WITH_CREDENTIALS: true,
+  // We use localStorage JWT tokens via Authorization header, not cookies.
+  WITH_CREDENTIALS: false,
 }
 
 /**
