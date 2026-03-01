@@ -84,17 +84,28 @@ def get_dashboard_summary(
     goals_progress = len([g for g in goals if g.current_amount >= g.target_amount]) / len(goals) * 100 if goals else 0
 
     # Calculate percentage changes
-    income_change = ((total_income - last_income) / last_income * 100) if last_income > 0 else Decimal("0")
-    expense_change = ((total_expenses - last_expenses) / last_expenses * 100) if last_expenses > 0 else Decimal("0")
+    if last_income > 0:
+        income_change = float((total_income - last_income) / last_income * 100)
+    elif total_income > 0:
+        income_change = 100.0
+    else:
+        income_change = 0.0
+
+    if last_expenses > 0:
+        expense_change = float((total_expenses - last_expenses) / last_expenses * 100)
+    elif total_expenses > 0:
+        expense_change = 100.0
+    else:
+        expense_change = 0.0
 
     return {
-        "total_income": total_income,
+        "total_income": float(total_income),
         "income_change": income_change,
-        "total_expenses": total_expenses,
+        "total_expenses": float(total_expenses),
         "expense_change": expense_change,
-        "total_savings": total_savings,
-        "net_worth": net_worth,
-        "goals_progress": goals_progress,
+        "total_savings": float(total_savings),
+        "net_worth": float(net_worth),
+        "goals_progress": float(goals_progress),
         "active_goals": len(goals)
     }
 
