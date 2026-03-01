@@ -29,7 +29,7 @@ export function AppLayout() {
           <Skeleton className="h-6 w-2/3" />
         </div>
         {/* Main content skeleton */}
-        <div className="flex-1 p-6 space-y-4">
+        <div className="flex-1 p-3 sm:p-6 space-y-4">
           <Skeleton className="h-10 w-1/3" />
           <div className="grid grid-cols-4 gap-4">
             <Skeleton className="h-32" />
@@ -93,7 +93,7 @@ export function AppLayout() {
 
         <Header onMenuClick={() => setMobileMenuOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-6">
           <Outlet />
         </main>
       </div>

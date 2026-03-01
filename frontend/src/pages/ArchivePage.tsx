@@ -285,7 +285,7 @@ export function ArchivePage() {
 
                 {isExpanded && (
                   <CardContent className="pt-0 border-t border-white/5">
-                    <div className="grid grid-cols-4 gap-6 py-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 py-4">
                       <div className="space-y-1">
                         <p className="text-sm text-muted-foreground">Income</p>
                         <p className="text-xl font-semibold text-green-400">

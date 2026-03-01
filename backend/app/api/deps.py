@@ -53,6 +53,13 @@ def get_current_user(
             detail="Inactive user",
         )
 
+    # Admin impersonation: if admin sends X-Impersonate-User-Id, return that user
+    impersonate_id = request.headers.get("X-Impersonate-User-Id")
+    if impersonate_id and user.role == UserRole.ADMIN:
+        target = db.query(User).filter(User.id == int(impersonate_id)).first()
+        if target:
+            return target
+
     return user
 
 

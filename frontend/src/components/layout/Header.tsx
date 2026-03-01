@@ -421,7 +421,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
           {/* Search Results Dropdown */}
           {showResults && searchQuery.length >= 2 && (
-            <div className="absolute top-full left-0 mt-2 w-96 bg-background/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden z-[150]">
+            <div className="absolute top-full left-0 mt-2 w-[calc(100vw-2rem)] sm:w-96 bg-background/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden z-[150]">
               <div className="max-h-[420px] overflow-y-auto">
                 {searching && !hasResults && (
                   <div className="flex items-center justify-center p-6">
@@ -569,7 +569,7 @@ export function Header({ onMenuClick }: HeaderProps) {
 
           {/* Notifications Dropdown */}
           {showNotifications && (
-            <div className="absolute top-full right-0 mt-2 w-80 bg-background/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden z-[150]">
+            <div className="absolute top-full right-0 mt-2 w-[calc(100vw-2rem)] sm:w-80 bg-background/95 backdrop-blur-xl border border-white/10 rounded-xl shadow-xl overflow-hidden z-[150]">
               <div className="flex items-center justify-between p-3 border-b border-white/5">
                 <h3 className="font-semibold text-sm">Notifications</h3>
                 {unreadCount > 0 && (

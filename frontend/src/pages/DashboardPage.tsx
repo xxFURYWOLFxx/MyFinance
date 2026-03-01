@@ -46,7 +46,7 @@ function StatCard({
   loading?: boolean
 }) {
   return (
-    <div className="glass-card rounded-2xl p-6 stat-card-hover">
+    <div className="glass-card rounded-2xl p-4 sm:p-6 stat-card-hover">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-sm font-medium text-muted-foreground mb-1">{title}</p>
@@ -139,7 +139,7 @@ export function DashboardPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground">
             {greeting}, {user?.first_name || 'there'}! <span className="wave">👋</span>
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -229,7 +229,7 @@ export function DashboardPage() {
         {/* Quick Stats */}
         <div className="lg:col-span-3 glass-card rounded-2xl p-6">
           <h3 className="text-lg font-semibold mb-6">Monthly Overview</h3>
-          <div className="grid grid-cols-2 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
             <div className="p-4 rounded-xl bg-green-500/10 border border-green-500/20">
               <div className="flex items-center gap-2 mb-2">
                 <DollarSign className="h-4 w-4 text-green-400" />
@@ -255,7 +255,7 @@ export function DashboardPage() {
           </div>
 
           {/* Goals & Savings Stats */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="p-3 rounded-xl bg-white/5 border border-white/5">
               <p className="text-xs text-muted-foreground mb-1">Total Savings</p>
               <p className="font-semibold text-purple-400">{formatCurrency(displayStats.total_savings)}</p>

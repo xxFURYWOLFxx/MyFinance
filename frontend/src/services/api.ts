@@ -1,5 +1,6 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import { API_CONFIG, AUTH_CONFIG } from '@/config'
+import { useAuthStore } from '@/stores/authStore'
 
 // User-friendly error messages
 const ERROR_MESSAGES: Record<number, string> = {
@@ -66,6 +67,10 @@ api.interceptors.request.use(
     const token = localStorage.getItem(AUTH_CONFIG.ACCESS_TOKEN_KEY)
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
+    }
+    const impersonatingUser = useAuthStore.getState().impersonatingUser
+    if (impersonatingUser) {
+      config.headers['X-Impersonate-User-Id'] = String(impersonatingUser.id)
     }
     return config
   },

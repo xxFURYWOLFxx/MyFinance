@@ -399,7 +399,7 @@ export function GoalsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Category</Label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {GOAL_CATEGORIES.map((cat) => {
                       const CatIcon = cat.icon
                       const isSelected = formData.category === cat.value

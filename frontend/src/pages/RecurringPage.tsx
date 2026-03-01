@@ -472,7 +472,7 @@ export function RecurringPage() {
                 </div>
                 <div className="space-y-2">
                   <Label>Category</Label>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {RECURRING_CATEGORIES.map((cat) => {
                       const Icon = cat.icon
                       const isSelected = formData.category === cat.value

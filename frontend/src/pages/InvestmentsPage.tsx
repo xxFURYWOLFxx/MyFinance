@@ -1331,7 +1331,7 @@ function TradingChart({
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-5 gap-3 mt-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mt-3">
         <div className="bg-secondary/20 rounded-lg px-4 py-3">
           <p className="text-xs text-muted-foreground mb-1">Quantity</p>
           <p className="text-lg font-bold">{Number(holding.quantity).toLocaleString()}</p>
@@ -1873,7 +1873,7 @@ export function InvestmentsPage() {
       )}
 
       {/* Main Layout */}
-      <div className="flex-1 min-h-0 grid grid-cols-[280px_1fr] gap-4">
+      <div className="flex-1 min-h-0 flex flex-col lg:grid lg:grid-cols-[280px_1fr] gap-4">
         {/* Left Sidebar - Portfolio Summary + Holdings */}
         <div className="flex flex-col gap-4 overflow-hidden">
           {/* Portfolio Summary Card */}
@@ -2023,7 +2023,7 @@ export function InvestmentsPage() {
                 {/* Asset Type - Bigger and better styled */}
                 <div className="space-y-3">
                   <Label className="text-sm font-medium">Asset Type</Label>
-                  <div className="grid grid-cols-6 gap-2">
+                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
                     {INVESTMENT_TYPES.map((type) => {
                       const Icon = type.icon
                       const isSelected = formData.holding_type === type.value
