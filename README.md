@@ -4,6 +4,9 @@ A self-hosted personal finance tracker. Track income, expenses, budgets, savings
 
 Built with FastAPI (Python) on the backend and React + TypeScript on the frontend.
 
+You can check out the website at https://paraymn.com 
+
+
 ---
 
 ## Quick Start
