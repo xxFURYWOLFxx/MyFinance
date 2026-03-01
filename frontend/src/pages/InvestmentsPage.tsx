@@ -1594,6 +1594,8 @@ export function InvestmentsPage() {
   useEffect(() => {
     loadData()
     loadQuickAccessFavorites()
+    // Auto-refresh prices in background on page load
+    silentRefreshPrices()
   }, [])
 
   useEffect(() => {
@@ -1669,6 +1671,15 @@ export function InvestmentsPage() {
     } catch (error) {
       console.error('Failed to delete holding:', error)
       toast.error('Failed to delete holding')
+    }
+  }
+
+  async function silentRefreshPrices() {
+    try {
+      await investmentsService.refreshPrices()
+      await loadData()
+    } catch {
+      // Silent — don't show errors on auto-refresh
     }
   }
 
